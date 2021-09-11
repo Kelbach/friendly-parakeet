@@ -1,58 +1,44 @@
-// Assignment code here
 var specialCharacters = [ '@', '%', '+', '/', "'", '!', '#', '$', '^', '?', ':', ',', ')', '(', '}', '{', ']', '[', '~', '-', '_', '.'];
 var numericCharacters = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 var lowerCasedCharacters = [ 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
 var upperCasedCharacters = [ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
-var passwordType = [];
-var charTrue = [];
-var passwordLength = 0;
-var passwordText = document.querySelector("#password");
-
-
-// WHEN I click the button to generate a password
-// THEN I am presented with a series of prompts for password criteria
-// WHEN prompted for password criteria
-// THEN I select which criteria to include in the password
-// WHEN prompted for the length of the password
-// THEN I choose a length of at least 8 characters and no more than 128 characters
-// WHEN asked for character types to include in the password
-// THEN I confirm whether or not to include lowercase, uppercase, numeric, and/or special characters
-// WHEN I answer each prompt
-// THEN my input should be validated and at least one character type should be selected
-// WHEN all prompts are answered
-// THEN a password is generated that matches the selected criteria
-// WHEN the password is generated
-// THEN the password is either displayed in an alert or written to the page
-
+var passwordType = []; //an array containing arrays of characters based on user choices
+var charTrue = []; // [passwordlength, lowerCase, upperCase, numbers, special] index 0 is a number and the rest are booleans
+var passwordLength = 0; //counter to keep track of while-loop
+var passwordText = document.querySelector("#password"); 
+var generateBtn = document.querySelector("#generate");
 
 function generatePassword() {
   var passwordConcat = [].concat.apply([], passwordType); //concat user defined array
+  passwordText.textContent = (''); //resets .textContent
+  passwordLength = 0; //resets while-loop counter
   
-  while (passwordLength < passwordType[0]) {
-    charSelect = Math.floor(Math.random()*passwordConcat.length + 1);
+  while (passwordLength < charTrue[0]) {
+    charSelect = Math.floor(Math.random()*passwordConcat.length);
     passwordText.textContent = passwordText.textContent + passwordConcat[charSelect];
     passwordLength++;
   }
-  if (charTrue[0] === true && hasLowerCase(passwordText) === false) {
-    passwordText = ('');
+
+  //character validation, boolean output
+  var hasLowerCase = /(?=.*[a-z])/.test(passwordText.textContent);
+  var hasUpperCase = /(?=.*[A-Z])/.test(passwordText.textContent);    
+  var hasNumeric = /(?=.*[\d])/.test(passwordText.textContent);  
+  var hasSpecial = /(?=.*[\W])/.test(passwordText.textContent);  
+
+  //conditional validations
+  if (charTrue[1] === true && hasLowerCase === false) {
     generatePassword();
   }
-  if (charTrue[1] === true && hasUpperCase(passwordText) === false) {
-    passwordText = ('');
+  if (charTrue[2] === true && hasUpperCase === false) {
     generatePassword();
   }
-  if (charTrue[2] === true && hasNumbers(passwordText) === false) {
-    passwordText = ('');
+  if (charTrue[3] === true && hasNumeric === false) {
     generatePassword();
   }
-  if (charTrue[3] === true && hasSpecial(passwordText) === false) {
-    passwordText = ('');
+  if (charTrue[4] === true && hasSpecial === false) {
     generatePassword();
   }
 }
-
-// Get references to the #generate element
-var generateBtn = document.querySelector("#generate");
 
 function chooseChar() {
   var lowerCase = window.confirm('Would you like to use lowercase characters? (a,b,c,d,e)');
@@ -91,35 +77,35 @@ function chooseChar() {
     window.alert('Please choose at least one set of characters.');
     chooseChar();
   }
-  console.log(charTrue);
 }
 
-// Write password to the #password input
 function writePassword() {
   passwordType = [];
   passwordLength = 0;
-  passwordText = ('');
   charTrue = [];
+
   var promptPassword = window.prompt('Please choose between 8 and 128 characters for your password. Enter integers only.');
-    promptPassword = parseInt(promptPassword)
-    if (promptPassword < 8 || promptPassword > 128) {
-      writePassword();
-    }
-    else if (isNaN(promptPassword)) {
-      window.alert('Enter integers only.');
-      writePassword();
+    if (promptPassword === null) {
+      return;
     }
     else {
-      console.log()
-      passwordType.push(promptPassword); //index 0 defines length
-      
-      chooseChar();
-      
-      var password = generatePassword();
-      
-      // passwordText.value = password;
+      promptPassword = parseInt(promptPassword)
+      if (promptPassword < 8 || promptPassword > 128) {
+        writePassword();
+      }
+      else if (isNaN(promptPassword)) {
+        window.alert('Enter integers only.');
+        writePassword();
+      }
+      else {
+        console.log()
+        charTrue.push(promptPassword); //index 0 defines length
+        
+        chooseChar();
+        
+        generatePassword();
+      }
     }
 }
 
-// Add event listener to generate button
 generateBtn.addEventListener("click", writePassword);
