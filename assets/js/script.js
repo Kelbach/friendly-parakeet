@@ -10,7 +10,7 @@ var generateBtn = document.querySelector("#generate");
 
 function generatePassword() {
   var passwordConcat = [].concat.apply([], passwordType); //concat user defined array
-  passwordText.textContent = (''); //resets .textContent
+  passwordText.textContent = ''; //resets .textContent
   passwordLength = 0; //resets while-loop counter
   
   while (passwordLength < charTrue[0]) {
@@ -19,7 +19,7 @@ function generatePassword() {
     passwordLength++;
   }
 
-  //character validation, boolean output
+  //character validation, boolean output, took me like 4 hours to figure out
   var hasLowerCase = /(?=.*[a-z])/.test(passwordText.textContent);
   var hasUpperCase = /(?=.*[A-Z])/.test(passwordText.textContent);    
   var hasNumeric = /(?=.*[\d])/.test(passwordText.textContent);  
@@ -40,41 +40,34 @@ function generatePassword() {
   }
 }
 
+//prompt to choose character sets
 function chooseChar() {
-  var lowerCase = window.confirm('Would you like to use lowercase characters? (a,b,c,d,e)');
-    if (lowerCase === true) {
+  var lowerCase = confirm('Would you like to use lowercase characters? (a,b,c,d,e)');
+    if (lowerCase) {
       passwordType.push(lowerCasedCharacters);
-      charTrue.push(lowerCase);
     }
-    else {
-      charTrue.push(lowerCase);
-    }
-  var upperCase = window.confirm('Would you like to use uppercase characters? (A,B,C,D,E)');
-    if (upperCase === true) {  
+    charTrue.push(lowerCase);
+    
+  var upperCase = confirm('Would you like to use uppercase characters? (A,B,C,D,E)');
+    if (upperCase) {  
       passwordType.push(upperCasedCharacters);
-      charTrue.push(upperCase);
     }
-    else {
-      charTrue.push(upperCase);
-    }
-  var numeric = window.confirm('Would you like to use numeric characters? (1,2,3,4,5)');
-    if (numeric === true) {  
+    charTrue.push(upperCase);
+    
+  var numeric = confirm('Would you like to use numeric characters? (1,2,3,4,5)');
+    if (numeric) {  
       passwordType.push(numericCharacters);
-      charTrue.push(numeric);
     }
-    else {
-      charTrue.push(numeric);
-    }
-  var special = window.confirm('Would you like to use special characters? (!,@,#,$,%)');
-    if (special === true) {  
+    charTrue.push(numeric);
+    
+  var special = confirm('Would you like to use special characters? (!,@,#,$,%)');
+    if (special) {  
       passwordType.push(specialCharacters);
-      charTrue.push(special);
     }
-    else {
-      charTrue.push(special);
-    }
+    charTrue.push(special);
+    
   if (lowerCase === false && upperCase === false && numeric === false && special === false) {
-    window.alert('Please choose at least one set of characters.');
+    alert('Please choose at least one set of characters.');
     chooseChar();
   }
 }
@@ -84,7 +77,7 @@ function writePassword() {
   passwordLength = 0;
   charTrue = [];
 
-  var promptPassword = window.prompt('Please choose between 8 and 128 characters for your password. Enter integers only.');
+  var promptPassword = prompt('Please choose between 8 and 128 characters for your password. Enter integers only.');
     if (promptPassword === null) {
       return;
     }
@@ -94,11 +87,10 @@ function writePassword() {
         writePassword();
       }
       else if (isNaN(promptPassword)) {
-        window.alert('Enter integers only.');
+        alert('Enter integers only.');
         writePassword();
       }
       else {
-        console.log()
         charTrue.push(promptPassword); //index 0 defines length
         
         chooseChar();
