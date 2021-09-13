@@ -77,7 +77,7 @@ function writePassword() {
   passwordLength = 0;
   charTrue = [];
 
-  var promptPassword = prompt('Please choose between 8 and 128 characters for your password. Enter integers only.');
+  var promptPassword = prompt('Please choose your password length; between 8 and 128 characters. Enter integers only.');
     if (promptPassword === null) {
       return;
     }
@@ -87,7 +87,7 @@ function writePassword() {
         writePassword();
       }
       else if (isNaN(promptPassword)) {
-        alert('Enter integers only.');
+        alert('Enter integers/numbers only.');
         writePassword();
       }
       else {
